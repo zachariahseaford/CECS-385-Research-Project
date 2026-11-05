@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+.env
+.DS_Store
+*.pyc
+# Data/results generated locally; keep folder README files
+data/*.csv
+results/*.csv
+results/*.png
+results/*.pdf
