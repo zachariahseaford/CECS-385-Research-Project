@@ -1,83 +1,54 @@
-# CECS 385 — Quantum vs. Classical ETF Portfolio Optimization
+# CECS 385 - Quantum vs Classical ETF Portfolio Selection
 
-Research project comparing **classical exhaustive search**, **greedy search**, and **simulated quantum QAOA** when choosing exactly **3 equally weighted ETFs**.
+For this project, I am comparing quantum computing with classical computing to see how well each method can select ETFs from a historical price dataset. I want to compare which method finds the best portfolio score, how fast it runs, and how much computing time it uses.
 
-**Main experiment:** [data/03_twenty_etf_exploration.ipynb](data/03_twenty_etf_exploration.ipynb) — 20 ETFs, 1,140 possible three-ETF portfolios, a January 2025 QAOA decision problem, and six historical classical comparisons (July–December 2024).
+I am using 20 ETFs and selecting 3 for each portfolio. This gives 1,140 different combinations.
 
-> This is an educational simulation, **not** an investment recommendation or evidence of quantum speedup. The current main notebook uses **Random Forest return forecasts** as common inputs for the three optimizers. If the forecasting method is changed, all dependent optimization results must be regenerated.
+## How the project works
 
-## Research question
+1. Use historical ETF prices from [marketdata](https://github.com/manisahni/marketdata).
+2. Use a Random Forest model to estimate next-month ETF returns.
+3. Calculate a portfolio score using predicted return minus a risk penalty.
+4. Compare exhaustive search, greedy search, and simulated quantum QAOA using the same score and ETF selections.
+5. Check the results against the best score from exhaustive search.
 
-How accurately does simulated QAOA approach the exact classical optimum for three-ETF selection, how does it compare with greedy search, and how might performance change as the ETF universe grows?
+Exhaustive search checks all 1,140 combinations, so it gives the exact best score for the chosen formula. Greedy search selects ETFs one at a time. QAOA uses a quantum circuit simulator (Qiskit Aer) to try to find high-scoring combinations. It does not use a real quantum computer.
 
-The question about **increasing ETF counts** remains **future work** for the main 20-ETF QAOA notebook. Do not present its depth-1/depth-2 experiments as an ETF-size experiment.
+**Note:** The portfolio score is not the same as an actual monthly or yearly return. The January 2025 results are one decision period, not evidence of long-term investing performance.
 
-## Repository layout
+## Project files
 
-| Path | Purpose |
-|---|---|
-| [data/03_twenty_etf_exploration.ipynb](data/03_twenty_etf_exploration.ipynb) | **Main research notebook**: 20-ETF forecasts, exact search, greedy, QAOA, comparisons and validation |
-| [data/01_qaoa_benchmark.ipynb](data/01_qaoa_benchmark.ipynb) | Earlier/supplementary smaller-universe QAOA and backtesting exploration; not the basis of the current presentation numbers |
-| [data/02_classical_100_etfs.ipynb](data/02_classical_100_etfs.ipynb) | Supplemental classical scaling exploration, including demonstration-data paths; not a verified real-data 100-ETF QAOA experiment |
-| [scripts/portfolio.py](scripts/portfolio.py) | Reusable portfolio score, exhaustive and greedy baselines, and helpers |
-| [scripts/download_data.py](scripts/download_data.py) | **Legacy six-ETF** data download helper, separate from the main 20-ETF notebook |
-| [tests/test_portfolio.py](tests/test_portfolio.py) | Basic checks of classical portfolio helpers |
-| [data/README.md](data/README.md) | Data-source and reproducibility notes |
-| [results/README.md](results/README.md) | Where notebook outputs go; notes on which results have been verified |
-| [requirements.txt](requirements.txt) | Python package requirements |
+- [Main notebook - 20 ETFs](data/03_twenty_etf_exploration.ipynb): current experiment and results.
+- [QAOA benchmark notebook](data/01_qaoa_benchmark.ipynb): earlier experiments with smaller ETF groups.
+- [Classical 100-ETF notebook](data/02_classical_100_etfs.ipynb): separate classical scaling experiment.
+- [portfolio.py](scripts/portfolio.py): reusable portfolio scoring and classical optimization code.
+- [test_portfolio.py](tests/test_portfolio.py): basic tests for the classical code.
+- [Data notes](data/README.md) and [Results notes](results/README.md).
 
-Older exploratory notebooks and the six-ETF script are **retained for provenance** and possible scaling tests. They are not required to follow the main notebook.
+## Running the project
 
-## How to run the main experiment
+Install the packages in `requirements.txt`, open `data/03_twenty_etf_exploration.ipynb` in Jupyter or Google Colab, and run the cells in order. The notebook downloads its own ETF prices.
 
-1. Use Python/Jupyter (including VS Code/Codespaces or Colab) and install `requirements.txt`. The main notebook also has an installation cell.
-2. Open **`data/03_twenty_etf_exploration.ipynb`** (not `notebooks/03_...`).
-3. Restart the notebook kernel and run all cells in order. The main notebook fetches adjusted ETF prices from the public [marketdata CSV](https://github.com/manisahni/marketdata) at runtime.
-4. Inspect the resulting data checks, classical/greedy comparison, QAOA runs and saved figures. Save the raw trial output before reporting new results.
-5. The one-run `QUICK_TEST = True` example is **different** from the repeated 10-trials-per-depth QAOA experiment; report settings separately.
-
-For the reusable classical helper checks:
+For the separate Python tests:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m unittest discover -s tests -v
 ```
 
-The legacy six-ETF downloader is **optional** and is not part of the main 20-ETF workflow.
+## Results so far
 
-## Core methodology
+These are the saved notebook outputs, not a new run of the code.
 
-- **Portfolio rule:** choose exactly 3 of 20 ETFs; weight each selected ETF at 1/3.
-- **Score:** estimated monthly portfolio return minus `lambda` times estimated monthly portfolio variance, with **lambda = 1.0** in the main notebook.
-- **Inputs:** Random Forest estimates next-month ETF returns from historical features; the risk estimate uses historical monthly-return covariance. The same score and inputs are used by exhaustive, greedy and QAOA.
-- **Exact reference:** exhaustive search checks all `C(20,3) = 1140` portfolios and establishes the highest possible score for the *defined mathematical objective*.
-- **Greedy:** adds the best next ETF under the scoring rule; not guaranteed to be optimal.
-- **QAOA:** Qiskit Aer simulation with a three-selection-preserving XY mixer; final portfolio is the highest-scoring valid sample. Repeated trials compare circuit depths 1 and 2, with 128 shots per optimization evaluation, 1,024 final shots, and a maximum of 50 COBYLA iterations.
-
-## Previously saved main-notebook results
-
-These are historical outputs **embedded in the committed notebook**, not a fresh execution performed by this README:
-
-| Result | Saved value |
+| Test | Result |
 |---|---|
-| Exact January 2025 benchmark score | 0.044302 (XLF, XLE, SPY) |
-| Greedy January 2025 score | 0.044302 (XLF, XLE, SPY) |
-| QAOA **one quick-run** score | 0.027837 (XLF, XLU, LQD) |
-| Six-month greedy vs exact portfolio matches | 6/6 (July–December 2024) |
-| QAOA depth 1: ten trials | Mean gap 0.02113, 0/10 exact hits |
-| QAOA depth 2: ten trials | Mean gap 0.01417, 0/10 exact hits |
+| January 2025 exhaustive search | 0.044302, XLF / XLE / SPY |
+| January 2025 greedy search | 0.044302, XLF / XLE / SPY |
+| January 2025 single QAOA quick run | 0.027837, XLF / XLU / LQD |
+| July-Dec 2024 greedy vs exhaustive search | Same portfolio in all 6 months |
+| QAOA depth 1, 10 runs | Average gap 0.02113; exact best found 0 times |
+| QAOA depth 2, 10 runs | Average gap 0.01417; exact best found 0 times |
 
-**Do not** claim the 20 QAOA trials represent 20 different months: the repeated depth comparison uses **one January 2025 problem**. Simulator timings cannot establish a real-hardware speedup.
+I still need to compare QAOA across different numbers of ETFs and evaluate longer-term results before making conclusions about yearly returns or risk-adjusted performance. QAOA has not shown an advantage in the current tests.
 
-## Incomplete work / limitations
-
-- Main-notebook QAOA size-growth comparison (e.g. 6, 10, 15 and 20 ETFs) has not yet been established.
-- QAOA has not yet been evaluated over the six historical months used for the classical/greedy comparison.
-- A meaningful statistical comparison of long-horizon strategy Sharpe ratios and trading-cost sensitivity is not completed in the main notebook.
-- Saved notebook outputs should be rechecked from a **fresh restart-and-run-all** before final submission.
-
-## Data and attribution
-
-Public historical ETF adjusted-close data: [manisahni/marketdata](https://github.com/manisahni/marketdata). Confirm date coverage, adjustments and potential survivorship bias. Academic references and claims belong in the report/presentation.
-
-CECS 385 — Transdisciplinary Research, University of Tennessee, Knoxville.
+CECS 385 - University of Tennessee, Knoxville.
