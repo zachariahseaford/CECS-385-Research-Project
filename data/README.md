@@ -1,13 +1,12 @@
-# Data sources and experiment inputs
+# Data and notebooks
 
-The **main** experiment is [03_twenty_etf_exploration.ipynb](03_twenty_etf_exploration.ipynb). It downloads adjusted ETF prices directly from the public [manisahni/marketdata](https://github.com/manisahni/marketdata) CSV and analyzes a defined 20-ETF universe. The main notebook's Random Forest forecasts and historical monthly covariance are shared inputs to all three portfolio optimizers.
+The main project is [03_twenty_etf_exploration.ipynb](03_twenty_etf_exploration.ipynb). It uses 20 ETFs from the [marketdata](https://github.com/manisahni/marketdata) adjusted-price dataset. The notebook downloads prices, estimates monthly returns with Random Forest, and runs the three portfolio-selection methods.
 
-## Other material in this folder
+Other notebooks:
 
-- [01_qaoa_benchmark.ipynb](01_qaoa_benchmark.ipynb): earlier/supplemental QAOA research; its demo configurations and outputs must not be confused with the main notebook's 20-ETF evidence.
-- [02_classical_100_etfs.ipynb](02_classical_100_etfs.ipynb): exploratory classical-scaling notebook; may use synthetic data, which are **not real ETF return evidence**.
-- `scripts/download_data.py` outside this folder is a **legacy six-ETF** data downloader. Running it is **not required** for Notebook 3.
+- [01_qaoa_benchmark.ipynb](01_qaoa_benchmark.ipynb): earlier QAOA tests with smaller ETF groups.
+- [02_classical_100_etfs.ipynb](02_classical_100_etfs.ipynb): separate classical experiment, including possible synthetic demonstration data.
 
-Price CSVs are intentionally ignored by Git. The main notebook fetches market data when executed. Before reporting results, verify timestamp alignment, adjusted-price conventions, training/test separation, data coverage and survivorship bias.
+The earlier notebooks are kept for reference, but the presentation's 20-ETF results come from Notebook 3.
 
-**Method note:** Removing or changing Random Forest in the main notebook requires rerunning exhaustive, greedy and QAOA comparisons. Historical outputs in the committed notebook came from the Random Forest-based inputs.
+Check the data dates before running a new test. The forecasting model should not use future returns when making predictions.
