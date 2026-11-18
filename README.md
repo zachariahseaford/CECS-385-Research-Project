@@ -19,12 +19,12 @@ Exhaustive search checks all 1,140 combinations, so it gives the exact best scor
 ## Project files
 
 - [Main notebook - 20 ETFs](data/03_twenty_etf_exploration.ipynb): current experiment and results.
-- [ETF-count scaling experiment](data/04%20QAOA%20ETF%20Scaling%20Test.ipynb): compare QAOA with 6, 10, 15, and 20 ETFs using the same settings. Results are not included until the experiment has been run.
+- [ETF-count scaling experiment](data/04%20QAOA%20ETF%20Scaling%20Test.ipynb): compare QAOA with 6, 10, 15, and 20 ETFs using the same settings. The 40-trial experiment is complete; see the results summary.
 - [QAOA benchmark notebook](data/01_qaoa_benchmark.ipynb): earlier experiments with smaller ETF groups.
 - [Classical 100-ETF notebook](data/02_classical_100_etfs.ipynb): separate classical scaling experiment.
 - [portfolio.py](scripts/portfolio.py): reusable portfolio scoring and classical optimization code.
 - [test_portfolio.py](tests/test_portfolio.py): basic tests for the classical code.
-- [Data notes](data/README.md) and [Results notes](results/README.md).
+- [Data notes](data/README.md), [Results notes](results/README.md), and [QAOA scaling results](results/QAOA%20ETF%20Scaling%20Results.md).
 
 ## Running the project
 
@@ -50,6 +50,6 @@ These are the saved notebook outputs, not a new run of the code.
 | QAOA depth 1, 10 runs | Average gap 0.02113; exact best found 0 times |
 | QAOA depth 2, 10 runs | Average gap 0.01417; exact best found 0 times |
 
-I still need to compare QAOA across different numbers of ETFs and evaluate longer-term results before making conclusions about yearly returns or risk-adjusted performance. QAOA has not shown an advantage in the current tests.
+The separate 40-trial QAOA scaling experiment is complete: exact optimal hits were 10/10 for 6 ETFs, 8/10 for 10 ETFs, and 0/10 for both 15 and 20 ETFs. See the [full results and run evidence](results/QAOA%20ETF%20Scaling%20Results.md). Longer-term returns and risk-adjusted performance still need more testing.
 
 CECS 385 - University of Tennessee, Knoxville.
