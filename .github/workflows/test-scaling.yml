@@ -3,7 +3,7 @@ name: Check QAOA scaling notebook
 on:
   pull_request:
     paths:
-      - "data/04_qaoa_etf_scaling.ipynb"
+      - "data/04 QAOA ETF Scaling Test.ipynb"
       - "tests/test_qaoa_scaling.py"
       - ".github/workflows/test-scaling.yml"
   workflow_dispatch:
