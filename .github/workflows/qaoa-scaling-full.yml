@@ -1,0 +1,41 @@
+name: Run full QAOA ETF scaling experiment
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/qaoa-scaling-full.yml"
+      - "scripts/run_qaoa_scaling.py"
+  workflow_dispatch:
+
+jobs:
+  scaling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        etfs: [6, 10, 15, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas scipy matplotlib scikit-learn qiskit qiskit-aer ipython
+      - name: Run 10 real-data QAOA trials at depth 2
+        env:
+          MPLBACKEND: Agg
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python scripts/run_qaoa_scaling.py --counts ${{ matrix.etfs }} --seeds 10 --iterations 50 --opt-shots 128 --final-shots 1024
+      - name: Save measured results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qaoa-real-data-${{ matrix.etfs }}-etfs
+          path: |
+            results/qaoa_size_trials.csv
+            results/qaoa_size_benchmarks.csv
+            results/qaoa_size_summary.csv
+            results/qaoa_size_scaling.png
+          if-no-files-found: warn
