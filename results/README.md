@@ -11,6 +11,6 @@ The current results include:
 
 The graphs and generated CSV files are useful for the report. Some generated files are ignored by `.gitignore`, so they may need to be exported from the notebook after running it.
 
-Still needed: testing QAOA with different numbers of ETFs, longer-term QAOA backtesting, and a proper comparison of actual returns and computing costs.
+The [QAOA ETF scaling experiment](QAOA%20ETF%20Scaling%20Results.md) has now completed 40 real-price QAOA trials (10 each for 6, 10, 15 and 20 ETFs). The four GitHub Actions artifact files contain the trial data and graphs. Longer-term QAOA backtesting and actual return/cost comparisons are still unfinished.
 
 The saved notebook output should be checked by restarting and running all cells before the final submission. Results from synthetic test data should not be presented as actual ETF performance.
