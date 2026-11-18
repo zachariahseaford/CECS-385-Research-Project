@@ -57,6 +57,8 @@ class ScalingNotebookTests(unittest.TestCase):
                 result = self.ns["make_problem"](size)
                 self.assertEqual(result["combinations"], combinations)
                 self.assertLess(result["encoding_error"], 1e-10)
+                self.assertGreaterEqual(result["exact_seconds"], 0)
+                self.assertGreaterEqual(result["greedy_seconds"], 0)
                 self.assertGreaterEqual(result["exact_score"] + 1e-12,
                                         result["greedy_score"])
 
