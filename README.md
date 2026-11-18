@@ -19,7 +19,7 @@ Exhaustive search checks all 1,140 combinations, so it gives the exact best scor
 ## Project files
 
 - [Main notebook - 20 ETFs](data/03_twenty_etf_exploration.ipynb): current experiment and results.
-- [ETF-count scaling experiment](data/04_qaoa_etf_scaling.ipynb): compare QAOA with 6, 10, 15, and 20 ETFs using the same settings. Results are not included until the experiment has been run.
+- [ETF-count scaling experiment](data/04%20QAOA%20ETF%20Scaling%20Test.ipynb): compare QAOA with 6, 10, 15, and 20 ETFs using the same settings. Results are not included until the experiment has been run.
 - [QAOA benchmark notebook](data/01_qaoa_benchmark.ipynb): earlier experiments with smaller ETF groups.
 - [Classical 100-ETF notebook](data/02_classical_100_etfs.ipynb): separate classical scaling experiment.
 - [portfolio.py](scripts/portfolio.py): reusable portfolio scoring and classical optimization code.
