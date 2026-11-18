@@ -41,7 +41,7 @@ class ScalingNotebookTests(unittest.TestCase):
             "CHOOSE": 3,
             "LAMBDA": 1.0,
             "QAOA_DEPTH": 2,
-            "QAOA_ITERATIONS": 2,
+            "QAOA_ITERATIONS": 6,
             "OPTIMIZATION_SHOTS": 16,
             "FINAL_SHOTS": 32,
             "MIXER_SCALE": 100.0,
