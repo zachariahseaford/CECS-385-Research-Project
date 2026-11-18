@@ -13,7 +13,7 @@ from qiskit.quantum_info import Statevector
 from qiskit_aer import AerSimulator
 
 
-NOTEBOOK = Path(__file__).resolve().parents[1] / "data" / "04_qaoa_etf_scaling.ipynb"
+NOTEBOOK = Path(__file__).resolve().parents[1] / "data" / "04 QAOA ETF Scaling Test.ipynb"
 
 
 class ScalingNotebookTests(unittest.TestCase):
