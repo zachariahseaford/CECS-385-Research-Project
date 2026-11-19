@@ -126,10 +126,4 @@ Based on these results, **I cannot claim a quantum advantage** for this portfoli
 - [IBM Qiskit documentation](https://docs.quantum.ibm.com/)
 - [Qiskit Aer documentation](https://qiskit.github.io/qiskit-aer/)
 
-## 8. AI disclosure
-
-I used ChatGPT during this project to help organize research notes, explain QAOA and related concepts, review and revise Python code, create and check GitHub workflow and test files, prepare summaries of experiment outputs, and draft or edit parts of the report and presentation. I reviewed the code and results through the project's notebooks and GitHub Actions runs. The ETF data came from the cited public dataset, and the numerical experimental results reported here came from saved notebook outputs and the completed GitHub Actions runs, not from ChatGPT-generated sample values.
-
-ChatGPT assistance does not replace my responsibility for checking the methods, understanding the code, interpreting the results, and ensuring the final submission accurately represents the work. I will review this statement and adjust it if needed to match the exact course disclosure instructions.
-
-**Submission note:** The instructor announced presentations for Friday, December 4, 2026, at 10:30 a.m. The announcement says to submit slides and the report, including an AI disclosure, by the deadline, but does not state the file-submission deadline in the quoted text. Verify the Canvas due date and required formats before submitting.
+**Remaining submission task:** Add my own AI disclosure after the project is complete on December 3, 2026. Check the actual Canvas submission due date and required formats separately from the December 4, 10:30 a.m. presentation time.
