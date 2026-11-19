@@ -92,6 +92,19 @@ The exact-hit rate dropped as the candidate set increased, and the average score
 
 These scaling results and the older twenty-ETF depth results came from separate runs and settings. They should not be treated as one identical experimental series.
 
+### 3.5 ETF group robustness check
+
+I also tested whether using different ETFs changed the QAOA results. I randomly rearranged the original 20 tickers into three different eligible groups of 10 and three groups of 15, keeping the January 2025 forecasts, risk inputs and QAOA settings the same. Three random starts were tested for each group, giving 18 additional runs.
+
+| ETFs | Groups | Trials | Exact best score found |
+|---:|---:|---:|---:|
+| 10 | 3 | 9 | 5/9 |
+| 15 | 3 | 9 | 0/9 |
+
+For ten ETFs, the three groups had exact-hit counts of 2/3, 0/3 and 3/3. This shows that which ETFs are included affects QAOA's performance in this test. For fifteen ETFs, none of the nine runs found the exact optimum, consistent with the earlier fixed-group experiment. Because there are only three groups and one market decision date, this is a limited robustness check rather than proof of a general trend.
+
+The [full trial log and summary](../results/QAOA%20Random%20ETF%20Groups%20Results.md) includes the measured score gaps and simulator runtimes.
+
 ## 4. Discussion
 
 The results show a clear difference among the three approaches. Exhaustive search is the benchmark because it checks every valid portfolio, and the 20-ETF problem is still small enough to evaluate all 1,140 combinations directly. Greedy search found the same best portfolios on the six historical decisions and the January 2025 decision, using much less searching.
@@ -104,7 +117,7 @@ The runtime measurements are **implementation-specific**. They describe Python e
 
 1. QAOA was tested with a simulator rather than physical quantum hardware.
 2. The scaling test used **one January 2025 decision date**, not a multi-year quantum backtest.
-3. The ETF groups were nested, meaning that adding ETFs also changed which assets were eligible. The test therefore mixes problem size and asset-composition effects.
+3. The main scaling experiment used nested ETF groups, so increasing size also changed which assets were available. A small follow-up test with different groups found differences in exact-hit rates, but still used only one decision date.
 4. Ten random starts at each size provide initial evidence but do not measure performance across many datasets or market conditions.
 5. The score uses **forecast monthly return minus a risk penalty**; it is not realized monthly profit, annual return or Sharpe ratio.
 6. The six-month realized-return comparison covers exhaustive and greedy search, not QAOA.
