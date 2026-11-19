@@ -1,0 +1,37 @@
+name: Check QAOA across different ETF groups
+
+on:
+  pull_request:
+    paths:
+      - "scripts/run_random_etf_groups.py"
+      - ".github/workflows/qaoa-random-groups.yml"
+  workflow_dispatch:
+
+jobs:
+  robustness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        etfs: [10, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install required packages
+        run: python -m pip install numpy pandas scipy matplotlib scikit-learn qiskit qiskit-aer ipython
+      - name: Run three randomized groups with three QAOA seeds each
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+          MPLBACKEND: Agg
+        run: python scripts/run_random_etf_groups.py --size ${{ matrix.etfs }} --groups 3 --seeds 3
+      - name: Upload measured results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: random-etf-groups-${{ matrix.etfs }}
+          path: results/robustness/*.csv
+          if-no-files-found: warn
