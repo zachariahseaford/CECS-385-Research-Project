@@ -1,0 +1,41 @@
+name: Execute larger QAOA ETF experiments
+
+on:
+  pull_request:
+    paths:
+      - "scripts/qaoa_larger_real_etfs.py"
+      - ".github/workflows/qaoa-larger-real-etfs.yml"
+  workflow_dispatch:
+
+jobs:
+  qaoa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      matrix:
+        etfs: [40, 80, 160]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy matplotlib yfinance qiskit qiskit-aer
+      - name: Download real ETF prices
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python scripts/check_extended_etf_data.py --limit ${{ matrix.etfs == 160 && 0 || matrix.etfs == 80 && 100 || 60 }} --batch 8
+      - name: Run QAOA with recorded budget and score
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/qaoa_larger_real_etfs.py --etfs ${{ matrix.etfs }}
+      - name: Save available run data even if QAOA failed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: larger-QAOA-${{ matrix.etfs }}-etfs
+          path: results/large_etf_feasibility/*.csv
+          if-no-files-found: warn
