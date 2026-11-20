@@ -1,0 +1,22 @@
+name: Compare two Aer simulation methods
+
+on:
+  pull_request:
+    paths:
+      - "scripts/check_qiskit_backends.py"
+      - ".github/workflows/check-qiskit-backends.yml"
+  workflow_dispatch:
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install requirements
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' scipy matplotlib scikit-learn qiskit qiskit-aer ipython
+      - name: Verify six-qubit QAOA backend consistency
+        run: python scripts/check_qiskit_backends.py
