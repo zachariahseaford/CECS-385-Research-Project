@@ -48,7 +48,7 @@ def make_circuit(n, k, mu, cov, angles, depth):
 def run_one(n,k,mu,cov,seed,depth,maxiter,optshots,finalshots):
     rng = np.random.default_rng(seed)
     shot_rng = np.random.default_rng(seed + 10000)
-    simulator = AerSimulator(method="matrix_product_state")
+    simulator = AerSimulator(method="matrix_product_state", n_qubits=n)
     calls=[0]
 
     def sample(angles, shots):
