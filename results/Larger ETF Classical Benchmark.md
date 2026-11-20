@@ -72,3 +72,21 @@ The two simulators agreed at this small scale. This argues against a simple back
 - [Qiskit Aer matrix-product-state documentation](https://qiskit.github.io/qiskit-aer/tutorials/7_matrix_product_state_method.html)
 
 **Suggested report wording:** “We extended the classical selection benchmark to 6/40, 12/80 and 24/160 using complete historical ETF price data and matched Random Forest inputs within the expanded study. Classical heuristics ran successfully, but no large-case exact optimum or QAOA comparison has yet been established.”
+
+## Additional 40-qubit QAOA feasibility measurement
+
+In a separate [six-of-forty QAOA pilot](https://github.com/zachariahseaford/CECS-385-Research-Project/actions/runs/44796558632), Qiskit Aer executed a real 40-qubit, 6-selected-ETF circuit at depth 1 with a reduced budget of 6 COBYLA evaluations, 32 optimization shots and 128 final shots.
+
+- QAOA sampled objective score: **0.041604** (rounded)
+- Greedy score on the same measured ETF inputs: **0.071265**
+- QAOA simulation time: **0.693 seconds**
+- Valid final samples: **128/128**
+- Optimizer converged: **No** (`success=False`)
+
+This is evidence that a real 6/40 quantum **simulation can execute**, not a fair full-budget QAOA-versus-greedy comparison. Six evaluations were deliberately insufficient to establish QAOA convergence.
+
+## Simulator capacity encountered at 80 and 160
+
+The initial 12/80 and 24/160 pilots did not produce portfolio scores. Qiskit raised `CircuitTooWideForTarget` because the default simulator target advertised 63 qubits. The program now explicitly configures `n_qubits` to the requested size in a separate attempt. A successful configuration is not the same as proof that the full circuit can be simulated efficiently or that QAOA converges.
+
+These backend limits occur at 80/160 and **cannot explain the original low scores measured with 20 qubits**.
