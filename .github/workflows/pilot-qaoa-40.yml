@@ -22,7 +22,7 @@ jobs:
         env:
           OPENBLAS_NUM_THREADS: "1"
           OMP_NUM_THREADS: "1"
-        run: python scripts/check_extended_etf_data.py --limit 40 --batch 8
+        run: python scripts/check_extended_etf_data.py --limit 60 --batch 8
       - name: Run 6-of-40 short QAOA feasibility pilot
         env:
           OPENBLAS_NUM_THREADS: "1"
