@@ -90,3 +90,27 @@ This is evidence that a real 6/40 quantum **simulation can execute**, not a fair
 The initial 12/80 and 24/160 pilots did not produce portfolio scores. Qiskit raised `CircuitTooWideForTarget` because the default simulator target advertised 63 qubits. The program now explicitly configures `n_qubits` to the requested size in a separate attempt. A successful configuration is not the same as proof that the full circuit can be simulated efficiently or that QAOA converges.
 
 These backend limits occur at 80/160 and **cannot explain the original low scores measured with 20 qubits**.
+
+## November 21: repeated larger QAOA results
+
+[GitHub Actions evidence: predeclared repeat run](https://github.com/zachariahseaford/CECS-385-Research-Project/actions/runs/44914108045)
+
+Four additional depth-2 6/40 trials (seeds 3–6) completed; the earlier experiment's first three depth-2 trials (seeds 0–2) also had complete measured scores before it was cancelled. All seven used a nominal maximum of 50 COBYLA evaluations, 128 optimization shots and 1,024 final shots. The optimizer did not always use the full maximum; seed 4 reached 50 evaluations without reporting success.
+
+| Seed | QAOA score | Greedy reference | Runtime (seconds) | COBYLA success |
+|---:|---:|---:|---:|---|
+| 0 | 0.060603 | 0.071265 | 380.83 | Yes |
+| 1 | 0.057228 | 0.071265 | 332.30 | Yes |
+| 2 | 0.055514 | 0.071265 | 161.89 | Yes |
+| 3 | 0.055179 | 0.071265 | 188.85 | Yes |
+| 4 | 0.062444 | 0.071265 | 269.15 | No |
+| 5 | 0.060523 | 0.071265 | 444.83 | Yes |
+| 6 | 0.057576 | 0.071265 | 136.34 | Yes |
+
+Mean QAOA score across these seven measured trials: **0.058438**. Best QAOA score: **0.062444**. Mean score disadvantage versus greedy: **0.012827**. No trial exceeded greedy.
+
+**Interpretation and caution:** These trials downloaded their adjusted-price histories independently via a changing third-party API and did not use a frozen dataset artifact. The greedy reference varied slightly across runs (approximately 0.07126458–0.07126463). Aggregate statistics are descriptive, not perfectly paired fixed-dataset statistics. Fix and fingerprint the data inputs before additional repeated trials.
+
+Two depth-2 12/80 and two depth-2 24/160 repeats were **cancelled** without validated QAOA scores; they must not be interpreted as zero-score or optimization failures. Earlier depth-1, six-iteration 12/80 and 24/160 pilots did finish, but their lower-budget results are not comparable to this depth-2 experiment.
+
+**Next priorities:** freeze adjusted-price inputs for all seeds; ensure the exact same ticker order and forecasts; introduce stronger exact/MIP classical benchmarks where feasible; add cost-circuit validation beyond the six-qubit simulator agreement; and predeclare the computational budget rather than select only favorable runs.
