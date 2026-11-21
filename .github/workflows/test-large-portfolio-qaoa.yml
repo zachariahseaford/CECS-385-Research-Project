@@ -1,0 +1,23 @@
+name: Test QAOA cost phase encoding and portfolio baselines
+
+on:
+  pull_request:
+    paths:
+      - "tests/test_large_portfolio_qaoa.py"
+      - ".github/workflows/test-large-portfolio-qaoa.yml"
+      - "scripts/large_etf_rf_classical.py"
+      - "scripts/qaoa_larger_real_etfs.py"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' scipy scikit-learn qiskit qiskit-aer
+      - name: Execute deterministic unit tests
+        run: PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_large_portfolio_qaoa.py' -v
