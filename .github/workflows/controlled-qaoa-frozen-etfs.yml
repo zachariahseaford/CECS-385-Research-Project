@@ -61,9 +61,8 @@ jobs:
           path: results/large_etf_feasibility/
       - name: Verify shared dataset fingerprint
         run: |
-          cd results/large_etf_feasibility
-          sha256sum -c snapshot_sha256.txt
-          cat snapshot_sha256.txt
+          sha256sum -c results/large_etf_feasibility/snapshot_sha256.txt
+          cat results/large_etf_feasibility/snapshot_sha256.txt
       - name: Run prespecified seed on exact shared dataset
         env:
           OPENBLAS_NUM_THREADS: "1"
