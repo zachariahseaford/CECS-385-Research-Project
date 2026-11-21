@@ -55,3 +55,17 @@ Verified [run 44923326162](https://github.com/zachariahseaford/CECS-385-Research
 - GitHub Actions workflows for each reproducible experiment
 
 This is an experiment log, not a claim that new QAOA settings beat the classical methods.
+
+## Experiment C: COBYLA versus Powell (20 ETFs, same three seeds)
+
+[GitHub Actions run 44923636158](https://github.com/zachariahseaford/CECS-385-Research-Project/actions/runs/44923636158) passed. Both optimizers used the original January 2025 ETF inputs, QAOA depth 2, three fixed random seeds (0–2), and the same exact optimal score **0.0443022829**. Powell had a maximum of 100 function evaluations; COBYLA had a limit of 50. This is a *comparison of optimizer methods, not matched optimization budgets*. In all cases optimizer.success was true.
+
+| Seed | COBYLA QAOA score | Powell QAOA score | COBYLA evaluations | Powell evaluations |
+|---:|---:|---:|---:|---:|
+| 0 | 0.026444 | 0.026444 | 39 | 41 |
+| 1 | 0.037831 | 0.026444 | 47 | 47 |
+| 2 | 0.026444 | 0.026444 | 39 | 82 |
+
+Neither method found the exact optimum in any of the three runs. COBYLA's mean gap was **0.014063**; Powell's mean gap was **0.017858**. Powell did **not** improve the tested outcomes; at seed 1, it produced a worse portfolio. Three seeds are preliminary evidence, and no general optimizer ranking is justified.
+
+**Takeaway:** The QAOA gap cannot be remedied simply by extending the COBYLA evaluation cap from 50 to 150 or swapping to this Powell configuration. The next controlled intervention should investigate circuit depth and initialization or phase-scale sensitivity, keeping the exact classical reference and reporting all seeds.
