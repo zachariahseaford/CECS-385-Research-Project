@@ -139,4 +139,4 @@ Based on these results, **I cannot claim a quantum advantage** for this portfoli
 - [IBM Qiskit documentation](https://docs.quantum.ibm.com/)
 - [Qiskit Aer documentation](https://qiskit.github.io/qiskit-aer/)
 
-**Before submission:** Verify the required report length and citation style from the course assignment; add properly checked scholarly citations, review any graphics, and complete a fresh run of Notebook 3 if full reproducibility is required. Avoid presenting the current objective scores as actual investment returns.
+**Remaining submission task:** Add my own AI disclosure after the project is complete on December 3, 2026. Check the actual Canvas submission due date and required formats separately from the December 4, 10:30 a.m. presentation time.
