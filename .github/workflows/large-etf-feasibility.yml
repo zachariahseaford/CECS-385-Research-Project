@@ -1,0 +1,32 @@
+name: Audit ETF data for larger portfolio experiments
+
+on:
+  pull_request:
+    paths:
+      - "scripts/large_etf_feasibility.py"
+      - ".github/workflows/large-etf-feasibility.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Check real ETF coverage and scalable classical baselines
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python scripts/large_etf_feasibility.py
+      - name: Save measured feasibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: larger-etf-data-audit
+          path: results/large_etf_feasibility/*.csv
+          if-no-files-found: warn
