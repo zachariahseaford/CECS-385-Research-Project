@@ -1,0 +1,32 @@
+name: Exploratory higher-risk QAOA vs greedy study
+
+on:
+  pull_request:
+    paths:
+      - "scripts/final_risk_sensitivity.py"
+      - ".github/workflows/final-risk-sensitivity.yml"
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install simulation dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy qiskit qiskit-aer
+      - name: Run all 36 predeclared higher-risk exploratory trials
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/final_risk_sensitivity.py
+      - name: Archive full evidence including failed scores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: higher-risk-qaoa-exploratory-results
+          path: results/final_risk_sensitivity/*.csv
+          if-no-files-found: warn
