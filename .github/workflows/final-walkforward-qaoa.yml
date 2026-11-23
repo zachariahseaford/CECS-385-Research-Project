@@ -1,0 +1,56 @@
+name: Final CECS 385 six-month walk-forward QAOA validation
+
+on:
+  pull_request:
+    paths:
+      - "scripts/final_walkforward_qaoa.py"
+      - ".github/workflows/final-walkforward-qaoa.yml"
+  workflow_dispatch:
+
+jobs:
+  quick-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install project dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy qiskit qiskit-aer
+      - name: Run one no-leakage walk-forward smoke check
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/final_walkforward_qaoa.py --smoke
+      - name: Save smoke results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-walkforward-smoke
+          path: results/final_walkforward/smoke_*.csv
+          if-no-files-found: warn
+
+  final-six-month:
+    needs: quick-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install project dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy qiskit qiskit-aer
+      - name: Run all 36 prespecified out-of-sample QAOA trials
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/final_walkforward_qaoa.py
+      - name: Save complete results even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-six-month-QAOA-data
+          path: results/final_walkforward/*.csv
+          if-no-files-found: warn
