@@ -42,3 +42,31 @@ After those three evidence packages and a polished limitations/discussion sectio
 - **Exact hits vs. investment returns.** A hit is agreement with the best *predicted return-minus-risk objective*, not evidence of actual profit.
 - **No quantum hardware speedup.** Qiskit Aer runs on classical compute resources.
 - **Multiple comparisons.** Nine initial exploratory trials reveal two promising hits; confirm with unseen random seeds and additional market dates rather than making broad superiority claims.
+
+## Confirmation results: 21 additional unseen-seed trials — completed
+
+The predeclared 21-trial confirmation finished successfully. This included each starting strategy at seeds 3–9, with the same exact 20-ETF January 2025 objective and depth-3/phase-scale-30/50-evaluation/1024-final-shot settings.
+
+| Initial state | Exact hits on NEW seeds 3–9 | Mean QAOA score on new seeds | Mean gap on new seeds | Mean simulator seconds |
+|---|---:|---:|---:|---:|
+| Spaced | 2 / 7 | 0.041586 | 0.002716 | 12.12 |
+| Rotated | **3 / 7** | **0.042300** | **0.002002** | 11.35 |
+| Random feasible | 1 / 7 | 0.037055 | 0.007248 | 8.90 |
+
+**On the independent confirmation seeds**, the rotated initial state had the highest exact-hit count and the smallest mean score gap; however, only seven seeds per approach were tested, so the observed differences are uncertain.
+
+When combining all ten tested seeds per method (first 3 exploratory plus 7 confirmation):
+
+| Initial state | Exact hits in all 10 | Combined approximate mean gap |
+|---|---:|---:|
+| Spaced | 2 / 10 | 0.003283 |
+| Rotated | **4 / 10** | **0.001902** |
+| Random feasible | 2 / 10 | 0.005705 |
+
+Those combined mean gaps are calculated from the rounded per-group means; use the artifact's raw trial scores to report additional precision. **Do not claim that 4/10 reliably beats 2/10 without more markets and uncertainty analysis.**
+
+Importantly, none of the tested initial portfolios was already the exact optimum. The exact QAOA hits were reached after applying the quantum circuit and optimization/sampling. A hit here refers to the exact *model objective* under simulation, **not a proven quantum speedup over greedy/exhaustive**, which also locate the optimum.
+
+Evidence: [21-trial confirmation GitHub Actions run 45263040991](https://github.com/zachariahseaford/CECS-385-Research-Project/actions/runs/45263040991) and its `qaoa-initialization-confirm-21` CSV artifact; code `scripts/qaoa_initial_state_confirm.py`.
+
+**Decision:** Circuit-initialization experimentation is sufficiently mature for a CECS 385 proof-of-concept. The next test should **not** be more seed-chasing on January 2025; it should validate the selected configurations across new market dates or objective settings.
