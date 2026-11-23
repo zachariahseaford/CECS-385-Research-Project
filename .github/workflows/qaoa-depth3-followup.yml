@@ -1,0 +1,32 @@
+name: Exploratory depth-3 QAOA iteration-budget followup
+
+on:
+  pull_request:
+    paths:
+      - "scripts/qaoa_depth3_followup.py"
+      - ".github/workflows/qaoa-depth3-followup.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install QAOA dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy matplotlib ipython qiskit qiskit-aer
+      - name: Compare depth 3 at 50 versus 120 maximum COBYLA evaluations
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/qaoa_depth3_followup.py
+      - name: Archive all outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: depth3-budget-exploratory-results
+          path: results/qaoa_depth_scale/*.csv
+          if-no-files-found: warn
