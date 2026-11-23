@@ -1,0 +1,35 @@
+name: Final CECS 385 code smoke validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/final-code-smoke.yml"
+      - "scripts/final_*.py"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install relevant project dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy qiskit qiskit-aer
+      - name: Compile all final research scripts
+        run: |
+          python -m compileall -q scripts/final_walkforward_qaoa.py scripts/final_large_prepare.py scripts/final_large_qaoa.py scripts/final_results_summary.py
+      - name: Run exact scoring and circuit encoding unit tests
+        env:
+          PYTHONPATH: scripts
+        run: python -m unittest discover -s tests -p 'test_large_portfolio_qaoa.py' -v
+      - name: Exercise final report generator on incomplete evidence
+        run: python -u scripts/final_results_summary.py
+      - name: Archive conservative placeholder-aware report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-report-code-smoke
+          path: results/final_report/*.md
+          if-no-files-found: error
