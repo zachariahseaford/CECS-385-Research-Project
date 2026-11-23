@@ -1,0 +1,32 @@
+name: CECS 385 confirm QAOA initialization with unseen seeds
+
+on:
+  pull_request:
+    paths:
+      - "scripts/qaoa_initial_state_confirm.py"
+      - ".github/workflows/qaoa-initial-confirm.yml"
+  workflow_dispatch:
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install QAOA dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy matplotlib ipython qiskit qiskit-aer
+      - name: Run 21 additional trials seeds 3 through 9
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/qaoa_initial_state_confirm.py
+      - name: Archive all new-seed outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qaoa-initialization-confirm-21
+          path: results/qaoa_initial_state_confirmation/*.csv
+          if-no-files-found: warn
