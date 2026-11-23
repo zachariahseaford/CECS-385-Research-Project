@@ -110,7 +110,7 @@ The frozen-data improved QAOA depth-3 pilot scored **0.048243** for its complete
 
 ## Sources for the presentation
 
-- [Final full research report](CECS%20385%20Final%20Research%20Report%20Draft.md)
+- [Final full research report](CECS%20385%20Final%20Research%20Report.md)
 - [Original scaling experiment](../results/QAOA%20ETF%20Scaling%20Results.md)
 - [Initialization confirmation](../results/November%2023%20Initialization%20Findings%20and%20Remaining%20Tests.md)
 - [Original 20-ETF simulation](../data/04%20QAOA%20ETF%20Scaling%20Test.ipynb)
