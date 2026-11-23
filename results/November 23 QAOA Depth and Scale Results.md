@@ -59,3 +59,18 @@ The verified QAOA cost-encoding tests and dual Aer backend agreement already arg
 - Compare with earlier [November 21 validation, COBYLA cap and classical tests](November%2021%20QAOA%20Validation%20and%20Optimizer%20Tests.md)
 
 **Presentation-safe takeaway:** “On the same 20-ETF test problem, increasing QAOA circuit depth from one to three improved the forecast-based objective score, though simulation time rose, and no configuration found the exact optimum. The evidence suggests circuit settings are consequential; it does not prove the Qiskit software is inaccurate or that quantum hardware has an advantage.”
+
+## Exploratory follow-up: depth-3 COBYLA maximum 50 versus 120
+
+After the depth/phase experiment, we selected depth 3 and scale 30 for a *post-hoc* optimization-budget comparison. The same original forecast/covariance, seeds 0–2, Qiskit Aer MPS simulator, 128 optimization shots and 1,024 final shots were used.
+
+| Maximum optimizer evaluations | Trials | Mean score gap | Best QAOA score | Exact hits | Mean simulator runtime | Mean actual evaluations |
+|---:|---:|---:|---:|---:|---:|---:|
+| 50 | 3 | 0.004606 | 0.043425 | 0/3 | 10.80 s | 50.0 |
+| 120 | 3 | 0.004606 | 0.043425 | 0/3 | 11.75 s | 54.7 |
+
+All three seeds produced **identical final portfolios and score gaps** at both iteration caps. With limit 120, COBYLA reported successful termination after 51–61 evaluations, but the final measured solution did not improve.
+
+**Conclusion:** More optimizer evaluations alone did not improve these depth-3 trials. The higher circuit depth itself appears to matter more than simply raising the iteration limit for the tested settings. This is exploratory and based on three paired starts; it does not prove convergence to a global circuit optimum.
+
+Source: [verified follow-up GitHub Actions run 45260714321](https://github.com/zachariahseaford/CECS-385-Research-Project/actions/runs/45260714321). Script `scripts/qaoa_depth3_followup.py`; artifact `depth3-budget-exploratory-results`.
