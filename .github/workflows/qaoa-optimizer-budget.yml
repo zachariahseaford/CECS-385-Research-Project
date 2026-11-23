@@ -1,0 +1,31 @@
+name: Compare QAOA 50 versus 150 COBYLA evaluations
+
+on:
+  pull_request:
+    paths:
+      - "scripts/qaoa_optimizer_budget.py"
+      - ".github/workflows/qaoa-optimizer-budget.yml"
+  workflow_dispatch:
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy matplotlib ipython qiskit qiskit-aer
+      - name: Run same 20-ETF circuit with two optimization budgets
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: python -u scripts/qaoa_optimizer_budget.py
+      - name: Save every trial including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qaoa-optimizer-budget-20-etf
+          path: results/qaoa_optimizer_budget/*.csv
+          if-no-files-found: warn
