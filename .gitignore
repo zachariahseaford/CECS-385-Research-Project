@@ -5,7 +5,8 @@ __pycache__/
 .env
 .DS_Store
 *.pyc
-# Data/results generated locally; keep folder README files
+# Scratch outputs generated locally; preserve submission evidence separately.
+# The submission ZIP archives measured artifacts; nested evidence folders are not ignored.
 data/*.csv
 results/*.csv
 results/*.png

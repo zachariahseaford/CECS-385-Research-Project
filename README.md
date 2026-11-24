@@ -8,7 +8,7 @@ This project asks whether Qiskit Aer–simulated Quantum Approximate Optimizatio
 
 ## Start with the final deliverables
 
-- **[Final research report](docs/CECS%20385%20Final%20Research%20Report.md)** — abstract, methodology, complete results, discussion, limitations, sources and GitHub Actions evidence
+- **Final submission PDF: `Seaford_CECS385_FinalReport.pdf`** — supplied in the submission ZIP; [matching report text](docs/CECS%20385%20Final%20Research%20Report.md) includes all nine sections and appendices
 - **[Final presentation notes and professor questions](docs/CECS%20385%20Final%20Presentation%20Notes.md)** — nine-slide speaking outline and direct explanations
 - **[Final reproduction guide](docs/Final%20CECS%20385%20Reproduction%20Guide.md)** — commands, experimental settings and exact/approximate baseline distinctions
 - **[Submission checklist](docs/CECS%20385%20Submission%20Checklist.md)** — what is complete and what to verify against the course rubric
@@ -42,12 +42,12 @@ This project asks whether Qiskit Aer–simulated Quantum Approximate Optimizatio
 - [Results report generator](scripts/final_results_summary.py)
 - [Scoring and phase-encoding tests](tests/test_large_portfolio_qaoa.py)
 
-Python 3.11 and `requirements.txt` provide the main dependencies; install `yfinance` additionally for the expanded universe.
+Python 3.11.18; `requirements.txt` is a flexible environment, including yfinance and pytest. For the final extension, install `requirements-final-extension.txt` with the measured versions: NumPy 2.4.6, pandas 2.3.3, scikit-learn 1.9.1, SciPy 1.17.1, Qiskit 2.6.2, Qiskit Aer 0.18.4, Matplotlib 3.11.2 and pytest 9.2.0. Earlier runs may differ; yfinance was not used in the final extension and its earlier version is not verified.
 
 ```bash
 python -m pip install -r requirements.txt
-python -m pip install yfinance
-PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_large_portfolio_qaoa.py' -v
+python -m pip install -r requirements-final-extension.txt
+PYTHONPATH=scripts python -m pytest tests/ -q
 python scripts/final_walkforward_qaoa.py --smoke
 python scripts/final_walkforward_qaoa.py
 ```
@@ -56,6 +56,15 @@ For expanded universe benchmarking, follow the reproduction guide and save a con
 
 ## Scientific integrity
 
-All experiments use **Qiskit Aer simulation**, not physical quantum hardware. Exhaustive solutions are exact under the model, but optimization scores are not future or realized returns. A six-of-forty QAOA depth-three run completed one seed and then was cancelled; its uncompleted seed is not counted as a failed portfolio. Raw measured outputs are retained in GitHub Actions artifacts; never fill in absent results.
+All experiments use **Qiskit Aer simulation**, not physical quantum hardware. Exhaustive solutions are exact under the model, but optimization scores are not future or realized returns. A six-of-forty QAOA depth-three run completed one seed and then was cancelled; its uncompleted seed is not counted as a failed portfolio. Raw measured outputs are preserved in the separate submission evidence ZIP; the original Actions links are provenance, not permanent storage. Notebook 02 is an excluded synthetic/CSV demonstration, not research evidence.
 
 [Project workflow history](https://github.com/zachariahseaford/CECS-385-Research-Project/actions) · [Original market data](https://github.com/manisahni/marketdata) · [Qiskit Finance portfolio tutorial](https://qiskit-community.github.io/qiskit-finance/tutorials/01_portfolio_optimization.html)
+
+## Submission documentation
+
+- [Data dictionary](docs/DATA_DICTIONARY.md)
+- [AI Use Statement (Appendix C companion)](docs/AI_USE_STATEMENT.md)
+- [Data sources and notebook scope](data/README.md)
+- [Artifact manifest](docs/ARTIFACT_MANIFEST.md)
+
+Primary fields: date/decision/target month (calendar dates); ticker (identifier); adjusted close (currency/share); trailing returns and volatility (decimal); forecasts and realized returns (decimal); covariance (return squared); risk penalty (multiplier); algorithm scores and gaps (objective units); seed, evaluations, shots (counts); hit/win/convergence (boolean); runtime (seconds); SHA-256 (fingerprint). See the dictionary for additional output fields. Run the full test suite including `tests/test_qaoa_scaling.py`; the final extension originally verified six tests, not the whole notebook suite.
