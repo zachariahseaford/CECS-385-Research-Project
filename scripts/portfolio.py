@@ -5,7 +5,7 @@ import numpy as np
 
 
 def portfolio_score(indices, mu, covariance, risk_lambda=1.0, choose=3):
-    """Annualized estimated return minus lambda * annualized variance."""
+    """Estimated return minus lambda * variance, in the input period's units."""
     w = np.zeros(len(mu), dtype=float)
     w[list(indices)] = 1.0 / choose
     return float(w @ mu - risk_lambda * (w @ covariance @ w))
