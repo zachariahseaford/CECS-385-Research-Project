@@ -1,14 +1,14 @@
 # Quantum Versus Classical ETF Portfolio Selection
 
 **CECS 385 — Final Research Report**  
-University of Tennessee, Knoxville · November 23, 2026  
+University of Tennessee, Knoxville · November 24, 2026  
 **Project:** Quantum Approximate Optimization Algorithm (QAOA) versus exhaustive and greedy ETF selection
 
 ## Abstract
 
 This project investigates whether the Quantum Approximate Optimization Algorithm (QAOA), simulated using IBM's Qiskit Aer software, can select exchange-traded fund (ETF) portfolios as accurately and efficiently as classical search. A Random Forest estimates next-month returns from historical ETF prices, and each method attempts to maximize the same equal-weighted predicted return minus covariance-based risk penalty. The original study selected three ETFs from up to twenty candidates, and compared exhaustive search, greedy search and QAOA. The initial scaling experiment found exact QAOA solutions in 10/10 trials for six ETFs and 8/10 for ten ETFs, but 0/10 for fifteen or twenty ETFs.
 
-Further experiments examined circuit depth, initial states, six historical decision months not used for January 2025 tuning, and portfolios selecting 6 of 40, 12 of 80 and 24 of 160 ETFs. For the January 2025 3-of-20 task, depth-three QAOA with varied initialization sampled the exact optimum in 8 of 30 trials. Across six additional months (36 trials), QAOA reached the exact solution five times. Greedy search equaled exhaustive search on all six historical decisions and the January 2025 decision. Exhaustive evaluation of all 3,838,380 six-of-forty portfolios also confirmed that greedy found the exact optimum for that larger case. A final risk-sensitivity test with two additional risk penalties again found no QAOA win over greedy. Although QAOA sometimes found exact solutions, this work did **not** demonstrate a quantum advantage. All QAOA experiments were classical simulations, and the modeled optimization scores are not realized investment returns.
+Further experiments examined circuit depth, initial states, six historical decision months not used for January 2025 tuning, and portfolios selecting 6 of 40, 12 of 80 and 24 of 160 ETFs. For the January 2025 3-of-20 task, depth-three QAOA with varied initialization sampled the exact optimum in 8 of 30 trials. Across six additional months (36 trials), QAOA reached the exact solution five times. Greedy search equaled exhaustive search on all six historical decisions and the January 2025 decision. Exhaustive evaluation of all 3,838,380 six-of-forty portfolios also confirmed that greedy found the exact optimum for that larger case. A final risk-sensitivity test with two additional risk penalties again found no QAOA win over greedy. A subsequent 72-case exploratory screening found two greedy misses; QAOA beat greedy in two of six conditional trials but never beat local search or random sampling. A separate 30-month classical backtest found that optimized portfolios underperformed SPY. Although QAOA sometimes found exact solutions, this work did **not** demonstrate a quantum advantage. All QAOA experiments were classical simulations, and the modeled optimization scores are not realized investment returns.
 
 ## 1. Research question and objectives
 
@@ -155,21 +155,21 @@ These results answer the professor's two technical concerns. **Qiskit itself is 
 
 **Circuit depth and initial state mattered.** Depth three and varied initial states enabled exact hits on the original 20-ETF problem, while simply increasing COBYLA's evaluation limit did not help. On held-out dates the algorithm was less reliable. Its observed runtime also increased with circuit depth and problem size. These Qiskit Aer wall-clock measurements are not controlled benchmarks of a future physical quantum device.
 
-**Classical search was exceptionally strong on these instances.** Greedy found the exact optimum in the original 20-ETF January decision, all six additional 20-ETF decisions, all twelve higher-risk decisions and the exact 6/40 expanded-data problem. Consequently, QAOA had no higher score available to surpass. An appropriate future benchmark would include other datasets where a classical greedy method has a *certified nonzero optimality gap*, along with a fixed computation budget and independent test periods.
+**Classical search was exceptionally strong on these instances.** Greedy found the exact optimum in the original 20-ETF January decision, all six additional 20-ETF decisions, all twelve higher-risk decisions and the exact 6/40 expanded-data problem. Consequently, QAOA had no higher score available to surpass. The November 24 extension below directly tests certified greedy misses.
 
 ## 6. Limitations
 
 1. **Simulator, not hardware:** Qiskit Aer ran on classical machines; no quantum hardware speed or cost advantage can be inferred.
-2. **Modeled objective, not investment profit:** Predicted return minus historical variance is not actual next-month profit or long-term Sharpe ratio. This work was an optimization study, not a live trading experiment.
+2. **Modeled objective, not investment profit:** Predicted return minus historical variance is not actual next-month profit or long-term Sharpe ratio. The separate classical backtest is retrospective, not a live trading experiment.
 3. **Limited independent dates:** Six held-out historical decisions provide useful validation but not broad coverage of market regimes.
 4. **Parameter selection:** Depth-three/scale-30/rotated initialization was informed by January 2025 experiments. January is a tuning case, not an untouched final test.
-5. **Strong classical references:** Greedy equaled exhaustive on every fully certified test reported. This prevents a QAOA score-based win, regardless of QAOA settings.
+5. **Strong classical references:** Greedy equaled exhaustive in all original certified cases and 70 of 72 additional screens. The six conditional QAOA trials cover only two distinct hard instances.
 6. **Large-instance uncertainty:** At 12/80 and 24/160, 25-start local search is not a globally certified optimum and QAOA runs were minimal feasibility pilots.
 7. **Resource and data consistency:** Runtimes include simulator/optimizer work but not all data preparation; CI environments and independently downloaded data snapshots vary. The improved 6/40 depth-three job yielded only one complete quantum trial before cancellation.
 8. **Sampling and numerical settings:** Finite shots, optimizer settings and circuit depth may limit observed performance. Exact solution samples do not certify convergence of COBYLA's continuous optimization.
 9. **ETF overlap:** Sector and broad-market funds may hold overlapping securities. A mechanically selected ETF portfolio is not guaranteed to be diversified or practical for investors.
 
-## November 24 exploratory extension (supersedes the earlier no-greedy-win conclusion)
+## 6.1 Additional exploratory results and classical backtest
 
 A fixed screening grid of 24 additional historical months and three risk penalties produced 72 cases. Greedy missed the exhaustive optimum in two cases. All six planned QAOA trials on those cases completed. In April 2023 (lambda=10), QAOA seeds 0 and 1 selected XLV, XLU and TLT, scoring 0.009560766 versus greedy's 0.007605070 (absolute improvement 0.001955696). Local search and shot-budget-matched uniform random sampling also reached the exact optimum. In September 2022 (lambda=100), all three QAOA seeds missed both greedy and the exact optimum. Overall: two wins over greedy, zero over local search or random sampling, two exact hits. Random sampling found the optimum in all six trials; each used 7,424 draws with replacement from 1,140 feasible portfolios. This compares total sampled shots, not equal wall-clock or computational resources; the random baseline uses precomputed scores. QAOA's best final sample is compared with the best of all random draws. All six optimizers reported nonconvergence. The results are conditional on screening for greedy failures, not an unconditional success rate. No general quantum advantage was demonstrated.
 
