@@ -1,0 +1,31 @@
+name: Final benchmark extension
+on:
+  pull_request:
+    paths:
+      - scripts/hard_portfolio_benchmark.py
+      - scripts/portfolio_backtest.py
+      - .github/workflows/final-benchmark-extension.yml
+  workflow_dispatch:
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3' 'scikit-learn>=1.5,<2' scipy qiskit qiskit-aer matplotlib pytest
+      - run: python -m compileall -q scripts
+      - run: PYTHONPATH=scripts python -m pytest tests/test_portfolio.py tests/test_large_portfolio_qaoa.py
+      - run: python -u scripts/portfolio_backtest.py
+      - run: python -u scripts/hard_portfolio_benchmark.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: final-extension-results
+          path: results/final_extension/
+          if-no-files-found: warn
