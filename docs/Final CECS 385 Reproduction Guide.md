@@ -94,7 +94,7 @@ python scripts/final_results_summary.py
 
 ## Conclusion for presentation
 
-**We did not demonstrate an advantage for QAOA over classical search.** However, we did show (i) that it can sample exact best portfolios, (ii) that cost circuit depth and initial basis state materially change results, (iii) that increasing optimizer evaluation limits alone was not helpful in the tested settings, and (iv) that larger quantum circuits are executable under a limited simulation budget while their optimization quality and runtime remain challenges.
+**We did not demonstrate a general quantum advantage; the exploratory extension found two wins over greedy but none over local or random search.** However, we did show (i) that it can sample exact best portfolios, (ii) that cost circuit depth and initial basis state materially change results, (iii) that increasing optimizer evaluation limits alone was not helpful in the tested settings, and (iv) that larger quantum circuits are executable under a limited simulation budget while their optimization quality and runtime remain challenges.
 
 
 ## November 24 update — final exploratory extension
