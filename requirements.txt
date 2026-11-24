@@ -8,3 +8,7 @@ qiskit>=2.0,<3
 qiskit-aer>=0.15,<1
 jupyterlab>=4,<5
 nbformat>=5.10,<6
+
+# Expanded ETF downloads and test runner
+yfinance
+pytest
