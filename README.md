@@ -4,7 +4,7 @@
 
 This project asks whether Qiskit Aer–simulated Quantum Approximate Optimization Algorithm (QAOA) can select high-scoring ETF portfolios competitively with classical exhaustive and greedy search, under the **same predicted return-minus-risk objective**. We use Random Forest return forecasts, exactly selected and equally weighted ETFs, a cardinality-preserving quantum mixer, and fully recorded simulator experiments.
 
-**Final conclusion:** QAOA sometimes sampled the mathematically optimal portfolio, but **did not beat greedy** in the fully controlled experiments. Greedy matched exhaustive search across the tested 20-ETF market dates and the exact 6-of-40 expanded ETF instance. The findings are optimization experiments, not measured portfolio profit and not quantum-hardware speedup.
+**Final conclusion:** QAOA sometimes sampled the mathematically optimal portfolio and **beat greedy in two of six conditional exploratory trials**, both April 2023 at risk penalty 10. It did not beat local search or shot-budget-matched random sampling. Greedy was optimal in 70 of 72 additional screening cases. No quantum advantage was demonstrated. A separate classical backtest distinguishes modeled scores from realized returns.
 
 ## Start with the final deliverables
 
@@ -24,8 +24,12 @@ This project asks whether Qiskit Aer–simulated Quantum Approximate Optimizatio
 | Exhaustive six-of-forty benchmark | **3,838,380 combinations**, greedy exactly optimal, score ~0.071265 |
 | Expanded 12/80 and 24/160 | QAOA simulation feasible in short pilots; below classical reference |
 | Higher-risk exploratory extension | 36 QAOA trials; 1 exact hit; no QAOA wins over greedy |
+| Hard-case extension | 72 screens; two greedy misses; QAOA wins 2/6, no wins over local or random |
+| Classical 30-month backtest | Optimized strategies 1.96%, equal-weight 5.05%, SPY 18.96% gross return |
 
 **Important:** The expanded ETF dataset is different from the original 20-ETF source. Only compare QAOA and classical numerical scores when both were computed from the **same underlying ETF universe, forecasts and covariance**.
+ 
+[Verified extension results](results/verified_extension/README.md)
 
 ## Code and repeatability
 
