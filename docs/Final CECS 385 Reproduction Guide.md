@@ -95,3 +95,8 @@ python scripts/final_results_summary.py
 ## Conclusion for presentation
 
 **We did not demonstrate an advantage for QAOA over classical search.** However, we did show (i) that it can sample exact best portfolios, (ii) that cost circuit depth and initial basis state materially change results, (iii) that increasing optimizer evaluation limits alone was not helpful in the tested settings, and (iv) that larger quantum circuits are executable under a limited simulation budget while their optimization quality and runtime remain challenges.
+
+
+## November 24 update — final exploratory extension
+
+The original no-win result applies only to the original experiments. The additional 72-case screening identified two greedy failures; QAOA matched the exact optimum and beat greedy in two of six conditional trials, both April 2023 at risk penalty 10. It beat neither one-swap local search nor random sampling (which found the optimum in all six trials). No quantum advantage was demonstrated. The separate 30-month classical backtest returned 1.96% for optimized portfolios versus 5.05% equal-weight and 18.96% SPY, gross of costs, with zero-risk-free-rate Sharpe ratios of 0.127, 0.205 and 0.464. Six unit tests passed. Run `python scripts/portfolio_backtest.py` and `python scripts/hard_portfolio_benchmark.py` to reproduce the extension. [Verified results](../results/verified_extension/README.md).

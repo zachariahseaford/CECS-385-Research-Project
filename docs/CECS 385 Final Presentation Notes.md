@@ -116,3 +116,8 @@ The frozen-data improved QAOA depth-3 pilot scored **0.048243** for its complete
 - [Original 20-ETF simulation](../data/04%20QAOA%20ETF%20Scaling%20Test.ipynb)
 - [Qiskit academic paper](https://arxiv.org/abs/2405.08810)
 - [Peer-reviewed portfolio QAOA benchmarking](https://doi.org/10.1007/s11128-022-03766-5)
+
+
+## November 24 update — final exploratory extension
+
+The original no-win result applies only to the original experiments. The additional 72-case screening identified two greedy failures; QAOA matched the exact optimum and beat greedy in two of six conditional trials, both April 2023 at risk penalty 10. It beat neither one-swap local search nor random sampling (which found the optimum in all six trials). No quantum advantage was demonstrated. The separate 30-month classical backtest returned 1.96% for optimized portfolios versus 5.05% equal-weight and 18.96% SPY, gross of costs, with zero-risk-free-rate Sharpe ratios of 0.127, 0.205 and 0.464. Six unit tests passed. Run `python scripts/portfolio_backtest.py` and `python scripts/hard_portfolio_benchmark.py` to reproduce the extension. [Verified results](../results/verified_extension/README.md).
