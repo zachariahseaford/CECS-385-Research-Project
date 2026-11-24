@@ -59,3 +59,8 @@
 > QAOA sometimes found the exact best portfolio score. We demonstrated that depth and initial state influence QAOA performance, but it did not outperform classical greedy search in the fully verified benchmarks. Our Qiskit Aer experiments do not show quantum computational speedup or realized investment gains.
 
 **Stop rule:** Additional unplanned QAOA reruns are not necessary for the current study. Improvements should be justified by a new research question and evaluated on distinct test cases, not by rerunning random seeds until a favorable outcome appears.
+
+
+## November 24 update — final exploratory extension
+
+The original no-win result applies only to the original experiments. The additional 72-case screening identified two greedy failures; QAOA matched the exact optimum and beat greedy in two of six conditional trials, both April 2023 at risk penalty 10. It beat neither one-swap local search nor random sampling (which found the optimum in all six trials). No quantum advantage was demonstrated. The separate 30-month classical backtest returned 1.96% for optimized portfolios versus 5.05% equal-weight and 18.96% SPY, gross of costs, with zero-risk-free-rate Sharpe ratios of 0.127, 0.205 and 0.464. Six unit tests passed. Run `python scripts/portfolio_backtest.py` and `python scripts/hard_portfolio_benchmark.py` to reproduce the extension. [Verified results](../results/verified_extension/README.md).
